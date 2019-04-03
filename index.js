@@ -1,12 +1,28 @@
-const cool = require('cool-ascii-faces')
-const express = require('express')
-const path = require('path')
-const PORT = process.env.PORT || 5000
+const path = require('path');
+const expressEdge = require('express-edge');
+const express = require('express');
+const app = new express();
+ 
+app.use(express.static('public'));
+app.use(expressEdge);
+app.set('views', __dirname + '/views');
 
-express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
-  .get('/cool', (req,res) => res.send(cool()))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+app.get('/', (req, res) => {
+    res.render('index');
+});
+ 
+app.get('/about', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'pages/about.html'));
+});
+ 
+app.get('/contact', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'pages/contact.html'));
+});
+ 
+app.get('/post', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'pages/post.html'));
+});
+ 
+app.listen(4000, () => {
+    console.log('App listening on port 4000')
+});
